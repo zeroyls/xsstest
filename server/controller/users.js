@@ -22,8 +22,8 @@ class User{
                         error_message: '密码不对'
                     })
                 }else{
-                    res.cookie('user_name', user_name, {maxAge: 60000 * 60});
-                    res.cookie('password', password, {maxAge: 60000 * 60});
+                    res.cookie('user_name', user_name, {maxAge: 60000 * 5});
+                    res.cookie('password', password, {maxAge: 60000 * 5});
                     res.send({
                         error_message: '登录成功',
                         error_code: 1
@@ -41,8 +41,8 @@ class User{
                             error_message: err
                         })
                     }else{
-                        res.cookie('user_name', user_name, {maxAge: 60000 * 60});
-                        res.cookie('password', password, {maxAge: 60000 * 60});
+                        res.cookie('user_name', user_name, {maxAge: 60000 * 5});
+                        res.cookie('password', password, {maxAge: 60000 * 5});
                         res.send({
                             error_message: '注册成功',
                             error_code: 1
@@ -54,8 +54,9 @@ class User{
     }
 
     checkLoginStatus(req, res, next){
-        if(!req.cookies){
+        if(!req.cookies || !req.cookies.user_name || !req.cookies.password){
             res.send({
+                error_code: 0,
                 error_message: "请先登录"
             })
         }else{
@@ -64,6 +65,7 @@ class User{
                 if(doc){
                     if(doc.password != password){
                         res.send({
+                            error_code: 0,
                             error_message: '登录态密码不正确'
                         })
                     }else{
@@ -71,6 +73,7 @@ class User{
                     }
                 }else{
                     res.send({
+                        error_code: 0,
                         error_message: '登录态用户不存在'
                     })
                 }

@@ -12,6 +12,10 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(cookieParser());
+
+app.get('/', function(req, res){
+    res.sendFile(path.resolve(__dirname, 'public/login.html'))
+})
 app.use(router);
 
 app.listen(8081, function(){

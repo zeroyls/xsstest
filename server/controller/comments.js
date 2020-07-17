@@ -60,6 +60,31 @@ class Comments{
         })
     }
 
+    search(req, res, next){
+        const queryString = req.query.search_str;
+        if(!queryString){
+            res.send({
+                error_message: "查询字符串不能为空",
+            })
+        }
+        var query = {};
+        query['content'] = new RegExp(queryString)
+        CommentsModel.find(query, '-_id', function(err, docs){
+            if(!err){
+                res.send({
+                    error_code: 1,
+                    error_message: "查找成功",
+                    queryString,
+                    docs
+                })
+            }else{
+                res.send({
+                    error_message: err
+                })
+            }
+        })
+    }
+
 }
 
 module.exports = new Comments()

@@ -6,6 +6,39 @@ window.onload = function(){
             listComments(addCommentsToView);
         })
     })
+
+    document.getElementById("searchButton").addEventListener("click", function(){
+        var search_str = document.getElementById("searchStr").value;
+        searchComments(search_str, function(queryString, docs){
+            document.getElementById("search-attention").innerHTML = "您查找" + queryString + "的结果如下";
+            addCommentsToView(docs);
+        })
+    })
+}
+
+function searchComments(searchStr, callback){
+    var url = "http://localhost:8081/comments/search?search_str=" + searchStr;
+    fetch(url, {
+        method: 'GET',
+        headers: {
+            'content-type': 'application/json'
+        },
+    }).then(function(response){
+        return response.json();
+    }).catch(function(error) {
+        alert(error)
+        console.error('Error:', error)
+    }).then(function(response){
+        if(response && response.error_code == 1){
+            console.log("查找成功")
+            callback(response.queryString, response.docs);
+        }else{
+            if(response && response.error_code == 0){
+                location.href = "login.html"
+            }
+            alert(response.error_message)
+        }
+    });
 }
 
 function addCommentToServer(content, callback){

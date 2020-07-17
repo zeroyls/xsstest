@@ -7,5 +7,6 @@ router.post('/user/login',  usersController.login);
 router.post('/comments/add', usersController.checkLoginStatus, commentsController.add);
 router.get('/comments/delete', usersController.checkLoginStatus, commentsController.delete);
 router.get('/comments/list', usersController.checkLoginStatus, commentsController.list);
+router.get('/comments/search', usersController.checkLoginStatus, commentsController.search);
 
 module.exports = router
